@@ -1,0 +1,30 @@
+{% load static %}<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101a17">
+  <meta name="description" content="看台档案：让每一场比赛，都留下我们的声音。">
+  <title>{% block title %}看台档案{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'archive/style.css' %}">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="{% url 'home' %}" aria-label="看台档案首页"><span class="brand-mark">K<span>·</span>D</span><span class="brand-name">看台档案<small>THE STAND ARCHIVE</small></span></a>
+      <nav class="main-nav" aria-label="主导航">
+        <a href="{% url 'home' %}">比赛档案</a>
+        {% if user.is_authenticated %}<a href="{% url 'my_page' %}">我的看台</a>{% endif %}
+        {% if user.is_staff %}<a href="{% url 'admin:index' %}">管理后台</a>{% endif %}
+      </nav>
+      <div class="header-account">
+        {% if user.is_authenticated %}<span class="hello">{{ user.username }}</span><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="text-button" type="submit">退出</button></form>
+        {% else %}<a class="text-button" href="{% url 'login' %}">登录</a><a class="button button-small" href="{% url 'register' %}">加入看台 <span>↗</span></a>{% endif %}
+      </div>
+    </header>
+    {% if messages %}<div class="messages" role="status">{% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+    <main>{% block content %}{% endblock %}</main>
+    <footer class="site-footer"><div><strong>看台档案</strong><span>每场比赛都有终场哨，故事没有。</span></div><span>由球迷写给球迷 · {% now "Y" %}</span></footer>
+  </div>
+</body>
+</html>

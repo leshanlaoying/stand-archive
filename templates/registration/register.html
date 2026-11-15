@@ -1,0 +1,3 @@
+{% extends 'base.html' %}
+{% block title %}加入看台 · 看台档案{% endblock %}
+{% block content %}<section class="auth-wrap"><div class="auth-intro"><span class="section-kicker">JOIN THE STAND</span><h1>好球，<br><em>值得一起聊。</em></h1><p>建立你的球迷档案，与朋友留下每场比赛的不同答案。</p></div><div class="auth-card"><h2>创建账号</h2><form method="post" class="form-grid">{% csrf_token %}{{ form.as_div }}<button class="button" type="submit">加入看台 ↗</button></form><p class="auth-switch">已有账号？<a href="{% url 'login' %}">直接登录</a></p></div></section>{% endblock %}

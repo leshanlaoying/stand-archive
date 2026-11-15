@@ -2,6 +2,8 @@
 
 用 Django 构建的球迷赛后复盘档案馆。公开浏览比赛、关键时刻和复盘；注册用户可评分、写复盘、记录时刻、赞同他人观点；管理员可管理比赛和内容。
 
+线上地址：[https://stand-archive-4gtp.onrender.com/](https://stand-archive-4gtp.onrender.com/)
+
 ## 本地运行
 
 ```bash

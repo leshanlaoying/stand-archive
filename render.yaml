@@ -14,9 +14,9 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: INITIAL_ADMIN_USERNAME
-        sync: false
+        value: archive_admin
       - key: INITIAL_ADMIN_PASSWORD
-        sync: false
+        generateValue: true
       - key: DEBUG
         value: 'false'
       - key: PYTHON_VERSION

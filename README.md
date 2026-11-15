@@ -20,7 +20,7 @@ python manage.py runserver
 
 1. 将整个项目推送到你自己的 GitHub 仓库。
 2. 在 Neon 创建免费 PostgreSQL 项目，选择与 Render 地区接近的区域，复制带 `sslmode=require` 的连接串。**连接串含密码，不能提交到 GitHub。**
-3. 在 Render 选择 **New > Blueprint**，连接仓库，应用 `render.yaml`。创建时将 Neon 连接串填入 `DATABASE_URL`，并设置首次管理员的 `INITIAL_ADMIN_USERNAME`、`INITIAL_ADMIN_PASSWORD`。首次部署会自动迁移数据库并创建管理员；部署成功后删除 Render 中的 `INITIAL_ADMIN_PASSWORD` 环境变量，后续部署不会重置管理员密码。
+3. 在 Render 选择 **New > Blueprint**，连接仓库，应用 `render.yaml`。创建时将 Neon 连接串填入 `DATABASE_URL`。首次部署会自动迁移数据库并创建用户名为 `archive_admin` 的管理员；密码由 Render 随机生成，可由账号所有者在 Web Service 的 **Environment** 页面查看。首次登录后台并改成自己的密码后，可删除 Render 中的 `INITIAL_ADMIN_PASSWORD` 环境变量；后续部署不会重置管理员密码。
 4. 部署成功后获得 `*.onrender.com` 公开网址。如已有自己的域名，在 Web Service 的 **Custom Domains** 中添加，并按提示设置 DNS。将域名加入 `ALLOWED_HOSTS`，将 `https://域名` 加入 `CSRF_TRUSTED_ORIGINS` 环境变量。
 
 Render 免费网站在空闲 15 分钟后休眠，下一次访问可能等待约一分钟；Neon 免费数据库独立保存数据。`main` 分支通过 GitHub Actions 检查后自动部署。网页代码更新不会删除 PostgreSQL 数据。结构变动通过 Django migration 前向升级。重要数据仍应定期导出备份；回退网页版本并不会自动回退数据库结构。
@@ -43,4 +43,4 @@ Render 免费网站在空闲 15 分钟后休眠，下一次访问可能等待约
 | `DEBUG` | 本地调试可设为 `true`，正式环境为 `false` |
 | `ALLOWED_HOSTS` | 逗号分隔的自定义域名 |
 | `CSRF_TRUSTED_ORIGINS` | 逗号分隔的完整 HTTPS 来源 |
-| `INITIAL_ADMIN_USERNAME` / `INITIAL_ADMIN_PASSWORD` | 仅首次创建管理员使用；创建后删除密码环境变量 |
+| `INITIAL_ADMIN_USERNAME` / `INITIAL_ADMIN_PASSWORD` | 用户名为 `archive_admin`，初始密码由 Render 生成；首次登录并改密后可删除密码环境变量 |

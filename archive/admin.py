@@ -1,13 +1,47 @@
 from django.contrib import admin
-from .models import Match, Moment, Review, ReviewLike
+from django import forms
+from .models import Match, Moment, Player, PlayerRating, Review, ReviewLike
+
+
+class PlayerInline(admin.TabularInline):
+    model = Player
+    fields = ("name", "note")
+    extra = 3
+    verbose_name = "球员"
+    verbose_name_plural = "球员（可继续添加）"
+
+
+class MatchAdminForm(forms.ModelForm):
+    home_score = forms.IntegerField(label="主队进球", min_value=0)
+    away_score = forms.IntegerField(label="客队进球", min_value=0)
+
+    class Meta:
+        model = Match
+        fields = ("home_team", "away_team", "home_score", "away_score")
 
 
 @admin.register(Match)
 class MatchAdmin(admin.ModelAdmin):
-    list_display = ("home_team", "away_team", "competition", "kickoff_at", "featured")
-    list_filter = ("competition", "featured")
-    search_fields = ("home_team", "away_team", "competition")
-    list_editable = ("featured",)
+    form = MatchAdminForm
+    fields = ("home_team", "away_team", "home_score", "away_score")
+    inlines = (PlayerInline,)
+    list_display = ("home_team", "away_team", "score", "player_count", "created_at")
+    search_fields = ("home_team", "away_team")
+
+    @admin.display(description="比分")
+    def score(self, obj):
+        return f"{obj.home_score} : {obj.away_score}" if obj.has_score else "未填写"
+
+    @admin.display(description="球员数")
+    def player_count(self, obj):
+        return obj.players.count()
+
+
+@admin.register(PlayerRating)
+class PlayerRatingAdmin(admin.ModelAdmin):
+    list_display = ("player", "author", "score", "updated_at")
+    search_fields = ("player__name", "author__username", "comment")
+    list_filter = ("score",)
 
 
 @admin.register(Review)
